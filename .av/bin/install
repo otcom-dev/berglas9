@@ -1,0 +1,21 @@
+#! /bin/bash
+
+
+# Import color
+source $AV_CONFIG_DIR/default_imports
+source $AV_CONFIG_DIR/findjar
+
+# Check for a help flag
+avCheckHelpFlags "$1" "berglas9" "install berglas9 for the local system" "\n \
+    Template to help you out.\n \
+\n"
+
+# Import system path
+
+#### Put system commands here
+avAppendSystemPath
+
+cd $AV_PROJ_TOP && cp ./berglas9 ~/.local/bin/
+echo "berglas9 installed to ~/.local/bin/berglas9"
+
+#### End commands

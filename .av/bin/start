@@ -1,0 +1,23 @@
+#! /bin/bash
+
+
+# Import color
+source $AV_CONFIG_DIR/default_imports
+source $AV_CONFIG_DIR/findjar
+
+# Check for a help flag
+avCheckHelpFlags "$1" "berglas9" "run berglas9 in development mode" "\n \
+    run berglas9 in development mode\n \
+\n"
+
+# Import system path
+
+#### Put system commands here
+
+"$AV_PROJ_TOP/.av/bin/make" || exit $?
+
+avAppendSystemPath
+
+cd $AV_PROJ_TOP && ./berglas9 $*
+
+#### End commands

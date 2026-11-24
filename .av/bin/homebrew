@@ -1,0 +1,28 @@
+#! /bin/bash
+
+
+# Import color
+source $AV_CONFIG_DIR/default_imports
+
+# Check for a help flag
+avCheckHelpFlags "$1" "berglas9" "Update the Homebrew formula" "\n\
+Usage:\n\
+    homebrew [version]\n\
+\n\
+Downloads the GitHub release archives and rewrites homebrew/Formula/berglas9.rb.\n\
+Defaults to the version in tools/install.sh.\n\
+\n"
+
+# Import system path
+avAppendSystemPath
+
+#### Put system commands here
+
+cd "$AV_PROJ_TOP"
+set -e
+
+version="${1:-$(./tools/version.sh)}"
+echo "Updating Homebrew formula for version ${version}..."
+./tools/update_homebrew_formula.sh "$version"
+
+#### End commands

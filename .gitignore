@@ -1,0 +1,17 @@
+# User-specific stuff:
+.idea
+.idea/mongoSettings.xml
+*.iws
+*.iml
+/out/
+/tmp/
+.idea_modules/
+atlassian-ide-plugin.xml
+.vscode/
+
+# go stuff
+src
+/berglas9
+/homebrew
+.env
+/release/

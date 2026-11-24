@@ -1,0 +1,51 @@
+#! /bin/bash
+
+
+# Import color
+source $AV_CONFIG_DIR/default_imports
+
+# Check for a help flag
+avCheckHelpFlags "$1" "berglas9" "Build release archives" "\n\
+Usage:\n\
+    release\n\
+\n\
+Stamps the version, then builds the archives used by the Homebrew formula.\n\
+Upload them to GitHub releases, then run av homebrew.\n\
+\n"
+
+# Import system path
+avAppendSystemPath
+
+#### Put system commands here
+
+cd "$AV_PROJ_TOP"
+set -e
+
+"$AV_PROJ_TOP/.av/bin/update-version"
+
+go mod tidy
+mkdir -p release
+
+if ! command -v gox >/dev/null 2>&1; then
+	echo "gox is not installed. Run av setup" >&2
+	exit 1
+fi
+
+gox \
+	-osarch="linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 freebsd/amd64 openbsd/amd64 netbsd/amd64" \
+	-gcflags="all=-trimpath=$(pwd)" \
+	-asmflags="all=-trimpath=$(pwd)" \
+	-output="release/berglas9_{{.OS}}_{{.Arch}}" \
+	./cmd/berglas9
+
+for f in release/berglas9_linux_* release/berglas9_darwin_* release/berglas9_freebsd_* release/berglas9_openbsd_* release/berglas9_netbsd_*; do
+	if [ -f "$f" ]; then
+		mv "$f" release/berglas9
+		tar -C release -cvzf "$f.tar.gz" berglas9
+		rm -f release/berglas9
+	fi
+done
+
+echo "Upload to GitHub releases and then run av homebrew"
+
+#### End commands
