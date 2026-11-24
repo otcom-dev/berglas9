@@ -35,13 +35,15 @@ gox \
 	-osarch="linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 freebsd/amd64 openbsd/amd64 netbsd/amd64" \
 	-gcflags="all=-trimpath=$(pwd)" \
 	-asmflags="all=-trimpath=$(pwd)" \
+	-ldflags="-s -w" \
 	-output="release/berglas9_{{.OS}}_{{.Arch}}" \
 	./cmd/berglas9
 
 for f in release/berglas9_linux_* release/berglas9_darwin_* release/berglas9_freebsd_* release/berglas9_openbsd_* release/berglas9_netbsd_*; do
-	if [ -f "$f" ]; then
+	if [ -f "$f" ] && [[ "$f" != *.tar.gz ]]; then
+		rm -f "$f.tar.gz"
 		mv "$f" release/berglas9
-		tar -C release -cvzf "$f.tar.gz" berglas9
+		tar -C release -czf "$f.tar.gz" berglas9
 		rm -f release/berglas9
 	fi
 done
